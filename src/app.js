@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const PORT = 3000
 
-const db = require('./models/index')
+const db = require('./database/models/index')
 
 app.use(express.json())
 
@@ -10,11 +10,25 @@ app.get('/home', (_, res) => {
     res.send('Hello world')
 })
 
+app.get('/types', async (_, res) => { 
+    try {
+        const productsTypes = await db.ProductType.findAll({
+            include: 'products'
+        });
+        return res.send(productsTypes)
+    } catch(error) {
+        res.send('Deu algum BO na busca');
+    }
+})
+
 app.get('/products', async (_, res) => { 
     try {
-        const products = await db.Product.findAll();
+        const products = await db.Product.findAll({
+            include: 'stores'
+        });
         return res.send(products)
     } catch(error) {
+        console.log('error', error.message)
         res.send('Deu algum BO na busca');
     }
 })

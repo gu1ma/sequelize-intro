@@ -1,7 +1,7 @@
 module.exports = (sequelize, dataTypes) => {
 
-    const Product = sequelize.define(
-        'Product', 
+    const ProductType = sequelize.define(
+        'ProductType', 
         {
             // Model attributes are defined here
           id: {
@@ -13,20 +13,20 @@ module.exports = (sequelize, dataTypes) => {
           },
           description: {
             type: dataTypes.STRING
-          }, 
-          product_type: {
-            type: dataTypes.INTEGER
-          },
-          preco: {
-            type: dataTypes.FLOAT
           }
         }, 
         {
-            tableName: 'products',
+            tableName: 'product_types',
             timestamps: false
         }
     )
 
+    ProductType.associate = (models) => {
+        ProductType.hasMany(models.Product, {
+          as: 'products',
+          foreignKey: 'product_type'
+        })
+    }
 
-    return Product
+    return ProductType
 }
